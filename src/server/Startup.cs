@@ -49,14 +49,13 @@ namespace CommentSection
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapHub<ChatHub>("/Hubs/chatHub"); // ??? what url?
+            });
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = Path.Join(env.ContentRootPath, "/src/client/comment-section-client");
                 spa.UseReactDevelopmentServer(npmScript: "start");
-            });
-            
-            app.UseEndpoints(endpoints => {
-                endpoints.MapHub<ChatHub>("chatHub");
             });
         }
     }

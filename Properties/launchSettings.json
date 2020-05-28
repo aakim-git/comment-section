@@ -12,6 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
+        "DB_CONNECTION_STRING": "Data Source=LAPTOP-7Q0O5277\\\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

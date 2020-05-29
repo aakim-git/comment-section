@@ -19,7 +19,7 @@ class Chat extends Component {
 
     componentDidMount() {
         // Disable send button until connection is established
-        this.SendButton.current.style.disabled = true;  
+        this.SendButton.current.style.disabled = true;
 
         // ***** Initialize socket to chat controller ******
         const hubConnection = new signalR.HubConnectionBuilder().withUrl("/Hubs/chatHub").build();
@@ -31,7 +31,7 @@ class Chat extends Component {
                 this.setState({ messages: msgs });
             });
 
-            this.state.hubConnection.start().then( () => {
+            this.state.hubConnection.start().then(() => {
                 this.SendButton.current.style.disabled = true;
             }).catch(function (err) {
                 return console.error(err.toString());
@@ -53,7 +53,7 @@ class Chat extends Component {
 
     render() {
         let MessagesList =
-            this.state.messages.map(function(msg, i) {
+            this.state.messages.map(function (msg, i) {
                 return <li key={i} > {msg} </li>
             });
 
@@ -65,14 +65,14 @@ class Chat extends Component {
                     <div className="row">
                         <div className="col-2">User</div>
                         <div className="col-4">
-                            <input type="text" id="userInput" onChange={this.handleUsernameChange}/>
+                            <input type="text" id="userInput" onChange={this.handleUsernameChange} />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-2">Message</div>
                         <div className="col-4">
-                            <input type="text" id="messageInput" onChange={this.handleMessageChange}/>
+                            <input type="text" id="messageInput" onChange={this.handleMessageChange} />
                         </div>
                     </div>
 
@@ -84,11 +84,11 @@ class Chat extends Component {
                                 type="button"
                                 id="sendButton"
                                 value="Send Message"
-                                ref={ this.SendButton }
-                                onClick={ (e) => {
+                                ref={this.SendButton}
+                                onClick={(e) => {
                                     this.SendMessage();
                                     e.preventDefault();
-                                    }
+                                }
                                 }
                             />
                         </div>
@@ -104,7 +104,7 @@ class Chat extends Component {
                 <div className="row">
                     <div className="col-6">
                         <ul id="messagesList">
-                            { MessagesList }
+                            {MessagesList}
                         </ul>
                     </div>
                 </div>

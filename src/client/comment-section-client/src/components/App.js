@@ -5,7 +5,7 @@ import '../style/App.css';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
 function App() {
-  return (
+    return (
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={Home} />

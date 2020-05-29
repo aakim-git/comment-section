@@ -28,7 +28,8 @@ namespace CommentSection
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
+            services.AddSignalR(); 
+            services.AddMvc(option => option.EnableEndpointRouting = false) ;
             services.AddSpaStaticFiles(Configuration =>
             {
                 Configuration.RootPath = "../src/client/comment-section-client";
@@ -50,11 +51,12 @@ namespace CommentSection
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthorization();
-
+            app.UseAuthorization(); 
             app.UseEndpoints(endpoints => {
-                endpoints.MapHub<ChatHub>("/Hubs/chatHub"); // ??? what url?
+                endpoints.MapHub<ChatHub>("/Hubs/chatHub"); 
             });
+            app.UseMvc();
+            
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = Path.Join(env.ContentRootPath, "/src/client/comment-section-client");

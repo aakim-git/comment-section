@@ -6,14 +6,14 @@ import * as serviceWorker from './scripts/serviceWorker';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
-  <React.StrictMode>
-      <BrowserRouter>
-          <Switch>
-             <Route path="/" component={App} />
-          </Switch>
-      </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <BrowserRouter>
+            <Switch>
+                <Route path="/" component={App} />
+            </Switch>
+        </BrowserRouter>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

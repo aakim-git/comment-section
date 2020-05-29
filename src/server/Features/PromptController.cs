@@ -9,9 +9,10 @@ namespace CommentSection.src.server.Features
     [Route("[controller]/[action]")]
     public class PromptController
     {
-        public string Create()
+        [HttpPost]
+        public string Create([FromBody] Models.Prompt newPrompt)
         {
-            return "Hello, World!";
+            return newPrompt.body;
         }
 
     }

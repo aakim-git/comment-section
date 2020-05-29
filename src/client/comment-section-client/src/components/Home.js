@@ -9,10 +9,15 @@ class Home extends Component {
     }
 
     CreateNewPrompt() {
+        var newPrompt = JSON.stringify(
+            { body: this.PromptTextField.current.value }
+        );
         // have button greyed out while waiting
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: "./prompt/create",
+            data: newPrompt,
+            contentType: "application/json",
             success:
                 (data) => {
                     console.log(data);

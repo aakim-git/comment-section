@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CommentSection.src.server.Features
 {
     [Route("[controller]/[action]")]
-    public class PromptController
+    public class PromptController : Controller
     {
         [HttpPost]
         public string Create([FromBody] Models.Prompt newPrompt)

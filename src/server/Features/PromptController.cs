@@ -14,9 +14,10 @@ namespace CommentSection.src.server.Features
         [HttpPost]
         public string Create([FromBody] Models.Prompt newPrompt)
         {
-            string sql = $"Insert Into Prompts (body) Values ('{newPrompt.body}')";
-            using(SqlCommand command = new SqlCommand(sql, DBConnection.db)){
-                command.CommandType = CommandType.Text;
+            string sql = "INSERT into Prompts (body) Values (@NewBody)";
+            using (SqlCommand command = new SqlCommand(sql, DBConnection.db))
+            {
+                command.Parameters.AddWithValue("@NewBody", newPrompt.body);
                 command.ExecuteNonQuery();
             }
             return newPrompt.body;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,10 +18,19 @@ namespace CommentSection
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(
+        public static IHostBuilder CreateHostBuilder(string[] args) {
+            var config = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddJsonFile("Properties/appsettings.json")
+                .AddJsonFile("Properties/launchSettings.json")
+                .Build();
+
+            return Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(
                 webBuilder => {
-                    webBuilder.UseStartup<Startup>(); // calls startup.cs
-                });
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseConfiguration(config);
+                }
+            );
+        }
     }
 }

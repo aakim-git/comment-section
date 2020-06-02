@@ -13,7 +13,7 @@ namespace CommentSection.src.server
         public static SqlConnection db { get; set; }
         public static void Init(IConfiguration config)
         {
-            db = new SqlConnection(config.GetConnectionString("Main"));
+            db = new SqlConnection(config.GetValue<string>("ConnectionStrings:Main"));
 
             // Test connection
             try
@@ -26,5 +26,4 @@ namespace CommentSection.src.server
             }
         }
     }
-}
 }

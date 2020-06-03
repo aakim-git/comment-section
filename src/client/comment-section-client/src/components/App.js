@@ -12,7 +12,7 @@ function App() {
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/chat" component={Chat} />
-                <Route path="/(\d+)" component={CommentSection} / >
+                <Route path="/(\d+)/" component={CommentSection} / >
             </Switch>
         </BrowserRouter>
     );

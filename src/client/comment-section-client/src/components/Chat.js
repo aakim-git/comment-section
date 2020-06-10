@@ -9,6 +9,7 @@ class Chat extends Component {
             message: '',
             messages: [],
             hubConnection: null,
+            id: this.props.id
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -23,6 +24,7 @@ class Chat extends Component {
 
         // ***** Initialize socket to chat controller ******
         const hubConnection = new signalR.HubConnectionBuilder().withUrl("/Hubs/chatHub").build();
+
         this.setState({ hubConnection: hubConnection }, () => {
             this.state.hubConnection.on("ReceiveMessage", (user, message) => {
                 var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -33,6 +35,10 @@ class Chat extends Component {
 
             this.state.hubConnection.start().then(() => {
                 this.SendButton.current.style.disabled = true;
+                console.log(this.state.id);
+                this.state.hubConnection.invoke("JoinGroup", this.state.id).catch(function (err) {
+                    return console.error(err.toString());
+                });
             }).catch(function (err) {
                 return console.error(err.toString());
             });
@@ -46,7 +52,7 @@ class Chat extends Component {
     handleMessageChange(e) { this.setState({ message: e.target.value }); }
 
     SendMessage() {
-        this.state.hubConnection.invoke("SendMessage", this.state.username, this.state.message).catch(function (err) {
+        this.state.hubConnection.invoke("SendMessage", this.state.username, this.state.message, this.state.id).catch(function (err) {
             return console.error(err.toString());
         });
     }

@@ -5,14 +5,20 @@ using System;
 
 namespace CommentSection.Hubs
 {
+
     public class ChatHub : Hub
     {
-        public async Task SendMessage(string user, string message)
+        public Task JoinGroup(string id)
+        {
+            return Groups.AddToGroupAsync(Context.ConnectionId, id);
+        }
+
+        public Task SendMessage(string user, string message, string group_id)
         {
             // send message to database. 
 
             // send data to clients. 
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            return Clients.Group(group_id).SendAsync("ReceiveMessage", user, message);
         }
     }
 }

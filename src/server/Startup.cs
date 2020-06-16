@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using System.IO;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Options;
+using CommentSection.src.server;
 
 namespace CommentSection
 {
@@ -24,14 +25,14 @@ namespace CommentSection
         public Startup(IConfiguration config)
         {
             _config = config;
-            src.server.DBConnection.Init(config); // instantiates global dbconnection
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
-            services.AddMvc(option => option.EnableEndpointRouting = false) ; 
+            services.AddMvc(option => option.EnableEndpointRouting = false);
+            services.AddSingleton<IConfiguration>(_config);
             services.AddSpaStaticFiles(Configuration =>
             {
                 Configuration.RootPath = "../src/client/comment-section-client";
@@ -39,8 +40,10 @@ namespace CommentSection
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
+            applicationLifetime.ApplicationStopping.Register(OnShutdown);
+
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
@@ -63,7 +66,12 @@ namespace CommentSection
             {
                 spa.Options.SourcePath = Path.Join(env.ContentRootPath, "/src/client/comment-section-client");
                 spa.UseReactDevelopmentServer(npmScript: "start");
-            });
+            }); 
+        }
+
+        private void OnShutdown()
+        {
+            // Cleanup
         }
     }
 }

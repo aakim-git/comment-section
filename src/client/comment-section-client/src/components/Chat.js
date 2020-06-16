@@ -1,15 +1,28 @@
 ﻿import React, { Component } from 'react';
 import * as signalR from '@aspnet/signalr';
+import $ from "jquery";
+
+class CommentNode {
+    constructor(data) {
+        this.body = data;
+        this.next = null;
+    }
+}
 
 class Chat extends Component {
     constructor(props) {
         super(props);
+
+        var id = this.props.id.split("/");   // id comes in the form: [prompt_id]/[chatbox_num]
         this.state = {
             username: '',
             message: '',
             messages: [],
+            message_ref_table: {},
             hubConnection: null,
-            id: this.props.id
+            id: this.props.id,
+            prompt_id: id[0], 
+            chatbox_num: id[1]
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -19,12 +32,11 @@ class Chat extends Component {
     }
 
     componentDidMount() {
+        // ***** Initialize socket to chat controller ******
         // Disable send button until connection is established
         this.SendButton.current.style.disabled = true;
 
-        // ***** Initialize socket to chat controller ******
         const hubConnection = new signalR.HubConnectionBuilder().withUrl("/Hubs/chatHub").build();
-
         this.setState({ hubConnection: hubConnection }, () => {
             this.state.hubConnection.on("ReceiveMessage", (user, message) => {
                 var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -35,13 +47,29 @@ class Chat extends Component {
 
             this.state.hubConnection.start().then(() => {
                 this.SendButton.current.style.disabled = true;
-                console.log(this.state.id);
                 this.state.hubConnection.invoke("JoinGroup", this.state.id).catch(function (err) {
                     return console.error(err.toString());
                 });
             }).catch(function (err) {
                 return console.error(err.toString());
             });
+        });
+        // **************************************************
+
+
+        // * Retrieve first level of comments from database *
+        $.ajax({
+            type: "GET",
+            url: "./comment/GetChildren/-1/" + this.state.prompt_id + "/" + this.state.chatbox_num,
+                success:
+                    (data) => {
+                        console.log(data);
+                    },
+
+                error:
+                    (error) => {
+                        console.log(error);
+                    }
         });
         // **************************************************
 
@@ -92,9 +120,9 @@ class Chat extends Component {
                                 value="Send Message"
                                 ref={this.SendButton}
                                 onClick={(e) => {
-                                    this.SendMessage();
-                                    e.preventDefault();
-                                }
+                                        this.SendMessage();
+                                        e.preventDefault();
+                                    }
                                 }
                             />
                         </div>

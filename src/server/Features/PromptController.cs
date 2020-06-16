@@ -5,12 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CommentSection.src.server.Features
 {
     [Route("[controller]/[action]")]
     public class PromptController : Controller
     {
+        private readonly IConfiguration config;
+
+        public PromptController(IConfiguration config)
+        {
+            this.config = config;
+        }
+
         [HttpPost]
         public List<string> Create([FromBody] Models.Prompt newPrompt)
         {
@@ -20,21 +28,26 @@ namespace CommentSection.src.server.Features
                 "VALUES(@NewBody); "
             ;
 
-            using (SqlCommand command = new SqlCommand(sql, DBConnection.db))
+            using (SqlConnection connection = new SqlConnection(config.GetValue<string>("ConnectionStrings:Main")))
             {
-                command.Parameters.AddWithValue("@NewBody", newPrompt.body);
+                connection.Open();
 
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    List<string> result = new List<string>();
-                    while (reader.Read())
+                    command.Parameters.AddWithValue("@NewBody", newPrompt.body);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        result.Add(reader.GetInt32(0).ToString());
-                        result.Add(reader.GetString(1));
+                        List<string> result = new List<string>();
+                        while (reader.Read())
+                        {
+                            result.Add(reader.GetInt32(0).ToString());
+                            result.Add(reader.GetString(1));
+                        }
+
+                        return result;
+
                     }
-
-                    return result;
-
                 }
             }
 
@@ -50,15 +63,20 @@ namespace CommentSection.src.server.Features
                 "WHERE id = @id ";
             ;
 
-            using (SqlCommand command = new SqlCommand(sql, DBConnection.db))
+            using (SqlConnection connection = new SqlConnection(config.GetValue<string>("ConnectionStrings:Main")))
             {
-                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
 
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    while (reader.Read())
+                    command.Parameters.AddWithValue("@id", id);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        return reader.GetString(0);
+                        while (reader.Read())
+                        {
+                            return reader.GetString(0);
+                        }
                     }
                 }
             }

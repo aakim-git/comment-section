@@ -51,11 +51,11 @@ class CommentSection extends Component {
     }
 
     render() {
-        // chat id is hard coded for now. 
+        // Is hard coded to have two chat boxes for now. 
         return (
             <div>
-                <h1> {this.state.prompt_id}</h1>
-                <h1> {this.state.prompt}</h1>
+                <h1> {this.state.prompt_id} </h1>
+                <h1> {this.state.prompt} </h1>
 
                 <Chat id={this.state.prompt_id + "/1"} /> 
                 <Chat id={this.state.prompt_id + "/2"} /> 

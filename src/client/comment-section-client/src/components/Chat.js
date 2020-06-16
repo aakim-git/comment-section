@@ -2,13 +2,6 @@
 import * as signalR from '@aspnet/signalr';
 import $ from "jquery";
 
-class CommentNode {
-    constructor(data) {
-        this.body = data;
-        this.next = null;
-    }
-}
-
 class Chat extends Component {
     constructor(props) {
         super(props);
@@ -33,8 +26,7 @@ class Chat extends Component {
 
     componentDidMount() {
         // ***** Initialize socket to chat controller ******
-        // Disable send button until connection is established
-        this.SendButton.current.style.disabled = true;
+        this.SendButton.current.style.disabled = true;  // Disable send button until connection is established
 
         const hubConnection = new signalR.HubConnectionBuilder().withUrl("/Hubs/chatHub").build();
         this.setState({ hubConnection: hubConnection }, () => {
@@ -57,13 +49,17 @@ class Chat extends Component {
         // **************************************************
 
 
-        // * Retrieve first level of comments from database *
+        //  Retrieve first level of comments from database 
         $.ajax({
             type: "GET",
             url: "./comment/GetChildren/-1/" + this.state.prompt_id + "/" + this.state.chatbox_num,
                 success:
                     (data) => {
-                        console.log(data);
+                        for (var i = 0; i < data.length; i++) {
+                            this.state.message_ref_table[data[i].id] = new CommentNode(data[i]);
+                            this.state.messages.push(new CommentNode(data[i]));
+                        }
+                            
                     },
 
                 error:
@@ -71,7 +67,6 @@ class Chat extends Component {
                         console.log(error);
                     }
         });
-        // **************************************************
 
     }
 
@@ -88,7 +83,8 @@ class Chat extends Component {
     render() {
         let MessagesList =
             this.state.messages.map(function (msg, i) {
-                return <li key={i} > {msg} </li>
+                console.log(msg);
+                return <li key={i} > {msg.body} </li>
             });
 
         return (
@@ -145,6 +141,16 @@ class Chat extends Component {
 
             </div>
         );
+    }
+}
+
+class CommentNode {
+    constructor(comment) {
+        this.body = comment["body"];
+        this.date = comment["date"];
+        this.rank = comment["rank"];
+        this.author = comment["author"];
+        this.next = null;
     }
 }
 

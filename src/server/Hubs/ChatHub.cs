@@ -22,11 +22,12 @@ namespace CommentSection.Hubs
             return Groups.AddToGroupAsync(Context.ConnectionId, id);
         }
 
-        public Task SendMessage(string user, string message, string group_id)
+        public Task SendComment(string user, string comment, string group_id)
         {
-            // save message in database. 
+            // save comment in database. 
             string sql =
                 "INSERT into Comments (body, author, prompt_id, chatbox_num) " +
+                "OUTPUT inserted.id, inserted.body, inserted.author, inserted.date " +
                 "VALUES(@body, @author, @prompt_id, @chatbox_num); "
             ;
 
@@ -36,18 +37,30 @@ namespace CommentSection.Hubs
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     // group_id is always passed in the form [prompt_id/chatbox_id]
-                    var meta = group_id.Split("/");
+                    var id = group_id.Split("/");
 
-                    command.Parameters.AddWithValue("@body", message);
+                    command.Parameters.AddWithValue("@body", comment);
                     command.Parameters.AddWithValue("@author", user);
-                    command.Parameters.AddWithValue("@prompt_id", meta[0]);
-                    command.Parameters.AddWithValue("@chatbox_num", meta[1]);
-                    command.ExecuteNonQuery();
-                }
+                    command.Parameters.AddWithValue("@prompt_id", id[0]);
+                    command.Parameters.AddWithValue("@chatbox_num", id[1]);
 
-                // then send data to clients. 
-                return Clients.Group(group_id).SendAsync("ReceiveMessage", user, message);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return Clients.Group(group_id).SendAsync("ReceiveComment", 
+                                reader.GetInt64(0).ToString(), 
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                reader.GetDateTime(3)
+                            );
+                        }
+                    }
+                }
             }
+
+            return null;
+
         }
     }
 }

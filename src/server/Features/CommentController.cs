@@ -53,9 +53,6 @@ namespace CommentSection.src.server.Features
                         return result;
                     }
                 }
-
-                return null;
-
             }
             
         }
@@ -63,15 +60,18 @@ namespace CommentSection.src.server.Features
 
         public Comment RowToComment(DataRow row)
         {
-            Comment result = new Comment();
-            result.body = row.Field<string>("body");
-            result.date = row.Field<DateTime>("date");
-            result.rank = row.Field<int>("rank");
-            result.author = row.Field<string>("author");
-            result.parent_id = row.Field<int?>("parent_id");
-            result.num_replies = row.Field<int>("num_replies");
-            result.prompt_id = row.Field<int>("prompt_id");
-            result.chatbox_num = row.Field<int>("chatbox_num");
+            Comment result = new Comment
+            {
+                body = row.Field<string>("body"),
+                date = row.Field<DateTime>("date"),
+                rank = row.Field<int>("rank"),
+                author = row.Field<string>("author"),
+                parent_id = row.Field<int?>("parent_id"),
+                num_replies = row.Field<int>("num_replies"),
+                prompt_id = row.Field<int>("prompt_id"),
+                chatbox_num = row.Field<int>("chatbox_num")
+            };
+
             return result;
         }
 

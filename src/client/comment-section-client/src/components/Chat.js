@@ -5,36 +5,46 @@ import $ from "jquery";
 class Chat extends Component {
     constructor(props) {
         super(props);
-
-        var id = this.props.id.split("/");   // id comes in the form: [prompt_id]/[chatbox_num]
         this.state = {
             username: '',
-            message: '',
-            messages: [],
-            message_ref_table: {},
+            comment: '',
+            comments_list: [],
+            comment_ref_table: {},
             hubConnection: null,
-            id: this.props.id,
-            prompt_id: id[0], 
-            chatbox_num: id[1]
+            id: this.props.id
         };
 
+        this.InitializeHubConnection = this.InitializeHubConnection.bind(this);
+        this.InitializeComments = this.InitializeComments.bind(this);
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
-        this.handleMessageChange = this.handleMessageChange.bind(this);
-        this.SendMessage = this.SendMessage.bind(this);
+        this.handleCommentChange = this.handleCommentChange.bind(this);
+        this.SendComment = this.SendComment.bind(this);
         this.SendButton = React.createRef();
     }
 
     componentDidMount() {
-        // ***** Initialize socket to chat controller ******
+        this.InitializeHubConnection();
+        this.InitializeComments();
+    }
+
+    InitializeHubConnection() {
         this.SendButton.current.style.disabled = true;  // Disable send button until connection is established
 
         const hubConnection = new signalR.HubConnectionBuilder().withUrl("/Hubs/chatHub").build();
         this.setState({ hubConnection: hubConnection }, () => {
-            this.state.hubConnection.on("ReceiveMessage", (user, message) => {
-                var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                var msgs = this.state.messages;
-                msgs.push(user + " says " + msg);
-                this.setState({ messages: msgs });
+            this.state.hubConnection.on("ReceiveComment", (id, body, author, date) => {
+                let newComment = new CommentNode();
+                newComment.body = body;
+                newComment.author = author;
+                newComment.date = date;
+
+                this.setState(previousState => ({
+                    comment_ref_table: {
+                        ...previousState.comment_ref_table,
+                        [id]: newComment
+                    },
+                    comments_list: [...previousState.comments_list, newComment]
+                }));
             });
 
             this.state.hubConnection.start().then(() => {
@@ -46,45 +56,54 @@ class Chat extends Component {
                 return console.error(err.toString());
             });
         });
-        // **************************************************
+    }
 
-
+    InitializeComments() {
         //  Retrieve first level of comments from database 
+        var id = this.props.id.split("/");   // id comes in the form: [prompt_id]/[chatbox_num]
         $.ajax({
             type: "GET",
-            url: "./comment/GetChildren/-1/" + this.state.prompt_id + "/" + this.state.chatbox_num,
-                success:
-                    (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            this.state.message_ref_table[data[i].id] = new CommentNode(data[i]);
-                            this.state.messages.push(new CommentNode(data[i]));
-                        }
-                            
-                    },
+            url: "./comment/GetChildren/-1/" + id[0] + "/" + id[1],
+            success:
+                (data) => {
+                    for (var i = 0; i < data.length; i++) {
+                        let newComment = new CommentNode();
+                        newComment.body = data[i].body;
+                        newComment.author = data[i].author;
+                        newComment.date = data[i].date;
 
-                error:
-                    (error) => {
-                        console.log(error);
+                        this.setState(previousState => ({
+                            comment_ref_table: {
+                                ...previousState.comment_ref_table,
+                                [data[i].id]: newComment
+                            },
+                            comments_list: [...previousState.comments_list, newComment]
+                        }));
                     }
-        });
 
+                },
+
+            error:
+                (error) => {
+                    console.log(error);
+                }
+        });
     }
 
     handleUsernameChange(e) { this.setState({ username: e.target.value }); }
 
-    handleMessageChange(e) { this.setState({ message: e.target.value }); }
+    handleCommentChange(e) { this.setState({ comment: e.target.value }); }
 
-    SendMessage() {
-        this.state.hubConnection.invoke("SendMessage", this.state.username, this.state.message, this.state.id).catch(function (err) {
+    SendComment() {
+        this.state.hubConnection.invoke("SendComment", this.state.username, this.state.comment, this.state.id).catch(function (err) {
             return console.error(err.toString());
         });
     }
 
     render() {
-        let MessagesList =
-            this.state.messages.map(function (msg, i) {
-                console.log(msg);
-                return <li key={i} > {msg.body} </li>
+        let CommentsList =
+            this.state.comments_list.map(function (cmt, i) {
+                return <li key={i} > {cmt.body} </li>
             });
 
         return (
@@ -100,9 +119,9 @@ class Chat extends Component {
                     </div>
 
                     <div className="row">
-                        <div className="col-2">Message</div>
+                        <div className="col-2">Comments</div>
                         <div className="col-4">
-                            <input type="text" id="messageInput" onChange={this.handleMessageChange} />
+                            <input type="text" id="commentInput" onChange={this.handleCommentChange} />
                         </div>
                     </div>
 
@@ -113,10 +132,10 @@ class Chat extends Component {
                             <input
                                 type="button"
                                 id="sendButton"
-                                value="Send Message"
+                                value="Send Comment"
                                 ref={this.SendButton}
                                 onClick={(e) => {
-                                        this.SendMessage();
+                                        this.SendComment();
                                         e.preventDefault();
                                     }
                                 }
@@ -133,8 +152,8 @@ class Chat extends Component {
 
                 <div className="row">
                     <div className="col-6">
-                        <ul id="messagesList">
-                            {MessagesList}
+                        <ul id="commentsList">
+                            {CommentsList}
                         </ul>
                     </div>
                 </div>
@@ -145,11 +164,11 @@ class Chat extends Component {
 }
 
 class CommentNode {
-    constructor(comment) {
-        this.body = comment["body"];
-        this.date = comment["date"];
-        this.rank = comment["rank"];
-        this.author = comment["author"];
+    constructor() {
+        this.body = null;
+        this.date = null;
+        this.rank = null;
+        this.author = null;
         this.next = null;
     }
 }

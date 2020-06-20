@@ -48,7 +48,7 @@ namespace CommentSection.src.server.Features
                         dt.Load(reader);
                         foreach (DataRow row in dt.Rows)
                         {
-                            result.Add(RowToComment(row));
+                            result.Add(Comment.RowToComment(row));
                         }
                         return result;
                     }
@@ -58,22 +58,6 @@ namespace CommentSection.src.server.Features
         }
 
 
-        public Comment RowToComment(DataRow row)
-        {
-            Comment result = new Comment
-            {
-                body = row.Field<string>("body"),
-                date = row.Field<DateTime>("date"),
-                rank = row.Field<int>("rank"),
-                author = row.Field<string>("author"),
-                parent_id = row.Field<int?>("parent_id"),
-                num_replies = row.Field<int>("num_replies"),
-                prompt_id = row.Field<int>("prompt_id"),
-                chatbox_num = row.Field<int>("chatbox_num")
-            };
-
-            return result;
-        }
 
     }
 

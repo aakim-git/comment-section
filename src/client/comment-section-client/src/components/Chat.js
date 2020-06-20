@@ -11,7 +11,8 @@ class Chat extends Component {
             comments_list: [],
             comment_ref_table: {},
             hubConnection: null,
-            id: this.props.id
+            id: this.props.id,
+            replying_to: 0
         };
 
         this.InitializeHubConnection = this.InitializeHubConnection.bind(this);
@@ -19,6 +20,7 @@ class Chat extends Component {
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handleCommentChange = this.handleCommentChange.bind(this);
         this.SendComment = this.SendComment.bind(this);
+        this.SetReplyTo = this.SetReplyTo.bind(this);
         this.SendButton = React.createRef();
     }
 
@@ -29,7 +31,6 @@ class Chat extends Component {
 
     InitializeHubConnection() {
         this.SendButton.current.style.disabled = true;  // Disable send button until connection is established
-
         const hubConnection = new signalR.HubConnectionBuilder().withUrl("/Hubs/chatHub").build();
         this.setState({ hubConnection: hubConnection }, () => {
             this.state.hubConnection.on("ReceiveComment", (id, body, author, date) => {
@@ -67,10 +68,14 @@ class Chat extends Component {
             success:
                 (data) => {
                     for (var i = 0; i < data.length; i++) {
+                        // find a cleaner way to do this
                         let newComment = new CommentNode();
+                        newComment.id = data[i].id;
                         newComment.body = data[i].body;
                         newComment.author = data[i].author;
                         newComment.date = data[i].date;
+                        newComment.rank = data[i].rank;
+                        newComment.has_replies = data[i].num_replies;
 
                         this.setState(previousState => ({
                             comment_ref_table: {
@@ -94,6 +99,8 @@ class Chat extends Component {
 
     handleCommentChange(e) { this.setState({ comment: e.target.value }); }
 
+    SetReplyTo(comment_id, comment_author) { console.log(comment_id + " " + comment_author); this.setState({ replying_to: comment_id }); }
+
     SendComment() {
         this.state.hubConnection.invoke("SendComment", this.state.username, this.state.comment, this.state.id).catch(function (err) {
             return console.error(err.toString());
@@ -102,9 +109,20 @@ class Chat extends Component {
 
     render() {
         let CommentsList =
-            this.state.comments_list.map(function (cmt, i) {
-                return <li key={i} > {cmt.body} </li>
+            this.state.comments_list.map((cmt, i) => {
+                return (
+                    <div key={i}>
+                        <li> {cmt.body} </li>
+                        <button onClick={
+                            (e) => {
+                                this.SetReplyTo(cmt.id, cmt.author);
+                                e.preventDefault();
+                            }}
+                        > Reply </button>
+                    </div>
+                );
             });
+            
 
         return (
             <div>
@@ -134,12 +152,13 @@ class Chat extends Component {
                                 id="sendButton"
                                 value="Send Comment"
                                 ref={this.SendButton}
-                                onClick={(e) => {
-                                        this.SendComment();
-                                        e.preventDefault();
-                                    }
-                                }
+                                onClick={(e) => { this.SendComment(); e.preventDefault(); }}
                             />
+                        </div>
+                        <div
+                            onClick={(e) => { this.SetReplyTo(0, ''); e.preventDefault(); }}
+                            id="messaging_to_display">
+                                {this.state.replying_to ? 'Replying to ' + this.state.comment_ref_table[this.state.replying_to].author + '\'s comment:' : null}
                         </div>
                     </div>
                 </div>
@@ -165,10 +184,12 @@ class Chat extends Component {
 
 class CommentNode {
     constructor() {
+        this.id = null;
         this.body = null;
         this.date = null;
         this.rank = null;
         this.author = null;
+        this.has_replies = null;
         this.next = null;
     }
 }

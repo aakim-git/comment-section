@@ -34,14 +34,22 @@ class Chat extends Component {
         const hubConnection = new signalR.HubConnectionBuilder().withUrl("/Hubs/chatHub").build();
         this.setState({ hubConnection: hubConnection }, () => {
             this.state.hubConnection.on("ReceiveComment", (comment) => {
-                let newComment = new CommentNode(comment);
-                this.setState(previousState => ({
-                    comment_ref_table: {
-                        ...previousState.comment_ref_table,
-                        [comment.id]: newComment
-                    },
-                    comments_list: [...previousState.comments_list, newComment]
-                }));
+                // If the received comment is not a reply, or the parent exists in the chatbox, display it
+                if (!comment["parent_id"] || this.state.comment_ref_table[comment["parent_id"]]) {
+                    let newComment = new CommentNode(comment);
+                    this.setState(previousState => ({
+                        comment_ref_table: {
+                            ...previousState.comment_ref_table,
+                            [comment.id]: newComment
+                        }
+                    }));
+
+                    if (!comment["parent_id"]) {
+                        this.setState(previousState => ({
+                            comments_list: [...previousState.comments_list, newComment]
+                        }));
+                    }
+                }
             });
 
             this.state.hubConnection.start().then(() => {

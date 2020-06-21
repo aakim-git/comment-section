@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Extensions.Configuration;
+using CommentSection.src.server.Models;
 
 namespace CommentSection.src.server.Features
 {
@@ -20,12 +21,12 @@ namespace CommentSection.src.server.Features
         }
 
         [HttpPost]
-        public List<string> Create([FromBody] Models.Prompt newPrompt)
+        public Prompt Create([FromBody] Prompt newPrompt)
         {
             string sql =
-                "INSERT into Prompts (body) " +
-                "OUTPUT inserted.id, inserted.body " +
-                "VALUES(@NewBody); "
+                "INSERT into Prompts (body, num_chatboxes) " +
+                "OUTPUT inserted.body, inserted.id, inserted.num_chatboxes " +
+                "VALUES(@NewBody, @NumChatboxes); "
             ;
 
             using (SqlConnection connection = new SqlConnection(config.GetValue<string>("ConnectionStrings:Main")))
@@ -35,31 +36,29 @@ namespace CommentSection.src.server.Features
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@NewBody", newPrompt.body);
+                    command.Parameters.AddWithValue("@NumChatboxes", newPrompt.num_chatboxes);
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        List<string> result = new List<string>();
                         while (reader.Read())
                         {
-                            result.Add(reader.GetInt32(0).ToString());
-                            result.Add(reader.GetString(1));
+                            return Prompt.ReaderToPrompt(reader);
                         }
-
-                        return result;
-
                     }
                 }
             }
+
+            return null;
 
         }
 
 
         [HttpGet]
         [Route("{id:int}")]
-        public string Get(string id)
+        public Prompt Get(int id)
         {
             string sql =
-                "SELECT body FROM Prompts " +
+                "SELECT * FROM Prompts " +
                 "WHERE id = @id ";
             ;
 
@@ -75,13 +74,13 @@ namespace CommentSection.src.server.Features
                     {
                         while (reader.Read())
                         {
-                            return reader.GetString(0);
+                            return Prompt.ReaderToPrompt(reader);
                         }
                     }
                 }
             }
 
-            return "";
+            return null;
 
         }
     }

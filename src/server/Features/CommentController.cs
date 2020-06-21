@@ -21,8 +21,9 @@ namespace CommentSection.src.server.Features
         }
 
         [HttpGet]
+        [Route("{id:int}")]
         [Route("{id:int}/{pid:int}/{cnum:int}")]
-        public List<Comment> GetChildren(string id, string pid, string cnum)
+        public List<Comment> GetChildren(string id, string pid="", string cnum="")
         {
             string sql = (-1 == int.Parse(id))
                 ? "SELECT * FROM Comments " +

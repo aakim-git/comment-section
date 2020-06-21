@@ -21,7 +21,10 @@ class Chat extends Component {
         this.handleCommentChange = this.handleCommentChange.bind(this);
         this.SendComment = this.SendComment.bind(this);
         this.SetReplyTo = this.SetReplyTo.bind(this);
+        this.GetChildrenComments = this.GetChildrenComments.bind(this);
+        this.RenderComments = this.RenderComments.bind(this);
         this.SendButton = React.createRef();
+
     }
 
     componentDidMount() {
@@ -44,6 +47,14 @@ class Chat extends Component {
                         }
                     }));
 
+                    // if it is a reply, add as a child node. 
+                    if (this.state.comment_ref_table[comment["parent_id"]]) {
+                        let updated_comment_ref_table = this.state.comment_ref_table;
+                        updated_comment_ref_table[comment["parent_id"]].replies.push(comment); 
+                        this.setState({ comment_ref_table: updated_comment_ref_table });
+                    }
+
+                    // if not a reply, display as root level comment
                     if (!comment["parent_id"]) {
                         this.setState(previousState => ({
                             comments_list: [...previousState.comments_list, newComment]
@@ -91,6 +102,31 @@ class Chat extends Component {
         });
     }
 
+    GetChildrenComments(of) {
+        if (this.state.comment_ref_table[of].has_replies) {
+            $.ajax({
+                type: "GET",
+                url: "./comment/GetChildren/" + of,
+                success:
+                    (data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            let newComment = new CommentNode(data[i]);
+                            let updated_comment_ref_table = this.state.comment_ref_table;
+                            updated_comment_ref_table[of].replies.push(newComment);
+                            updated_comment_ref_table[newComment.id] = newComment;
+                            this.setState({ comment_ref_table: updated_comment_ref_table }); 
+                        }
+                    },
+
+                error:
+                    (error) => {
+                        console.log(error);
+                    }
+            });
+        }
+        
+    }
+
     handleUsernameChange(e) { this.setState({ username: e.target.value }); }
 
     handleCommentChange(e) { this.setState({ comment: e.target.value }); }
@@ -103,28 +139,64 @@ class Chat extends Component {
         });
     }
 
-    render() {
-        let CommentsList =
-            this.state.comments_list.map((cmt, i) => {
-                return (
-                    <div key={i}>
-                        <li> {cmt.body} </li>
+    RenderComments(cmt) {
+        return (
+            <ul>
+                <div>
+                    <li> {cmt.body} </li>
+                    <li> {cmt.author} </li>
+                    <li> {cmt.date} </li>
+                    <button onClick={
+                        (e) => {
+                            this.SetReplyTo(cmt.id);
+                            e.preventDefault();
+                        }}
+                    > Reply </button>
+
+                    { // if comment has replies, display a 'See Replies' button
+                        cmt.has_replies > 0 &&
                         <button onClick={
                             (e) => {
-                                this.SetReplyTo(cmt.id);
+                                this.GetChildrenComments(cmt.id);
+                                // this.disappear();
                                 e.preventDefault();
                             }}
-                        > Reply </button>
-                    </div>
-                );
-            });
-            
+                        > See Replies </button>
+                    }
 
+                    <div>
+                        {
+                            cmt.replies &&
+                            cmt.replies.length > 0 &&
+                            cmt.replies.map((comment) => {
+                                return (
+                                    <div key={comment.id}>
+                                        {this.RenderComments(comment)}
+                                    </div>
+                                )
+                            })
+
+                        }
+                    </div>
+                </div>
+            </ul>
+        );
+    }
+
+
+    
+
+    render() {
+        let CommentsList = this.state.comments_list.map((comment) =>
+            <div key={comment.id}>
+                { this.RenderComments(comment) }
+            </div>
+        );
+             
         return (
             <div>
                 <div className="container">
                     <div className="row">&nbsp;</div>
-
                     <div className="row">
                         <div className="col-2">User</div>
                         <div className="col-4">
@@ -168,7 +240,9 @@ class Chat extends Component {
                 <div className="row">
                     <div className="col-6">
                         <ul id="commentsList">
-                            {CommentsList}
+                            <div>
+                                {CommentsList}
+                            </div>
                         </ul>
                     </div>
                 </div>
@@ -187,8 +261,9 @@ class CommentNode {
             this.rank = null;
             this.author = null;
             this.has_replies = null;
-            this.next = null;
+            this.replies = [];
         }
+
         else {
             this.id = Comment.id;
             this.body = Comment.body;
@@ -196,7 +271,7 @@ class CommentNode {
             this.rank = Comment.rank;
             this.author = Comment.author;
             this.has_replies = Comment.num_replies;
-            this.next = null;
+            this.replies = [];
         }
     }
 }

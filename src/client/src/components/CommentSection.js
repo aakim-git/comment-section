@@ -2,6 +2,7 @@
 import Chat from './Chat.js';
 import $ from "jquery";
 
+import '../style/CommentSection.css';
 
 function GetCSIDFromURL() {
     let url = window.location.href;

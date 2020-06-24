@@ -194,7 +194,7 @@ class Chat extends Component {
         );
              
         return (
-            <div>
+            <div className="chatbox">
                 <div className="container">
                     <div className="row">&nbsp;</div>
                     <div className="row">

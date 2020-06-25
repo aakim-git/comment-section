@@ -8,8 +8,8 @@ namespace CommentSection.src.server.Models
 {
     public class Prompt
     {
-        public string body { get; set; }
         public int id { get; set; }
+        public string body { get; set; }
         public int num_chatboxes { get; set; }
 
         public static Prompt ReaderToPrompt(SqlDataReader reader)

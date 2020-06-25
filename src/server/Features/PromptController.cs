@@ -23,6 +23,13 @@ namespace CommentSection.src.server.Features
         [HttpPost]
         public Prompt Create([FromBody] Prompt newPrompt)
         {
+
+            System.Diagnostics.Debug.WriteLine(newPrompt.body);
+
+            System.Diagnostics.Debug.WriteLine(newPrompt.id);
+
+            System.Diagnostics.Debug.WriteLine(newPrompt.num_chatboxes);
+
             string sql =
                 "INSERT into Prompts (body, num_chatboxes) " +
                 "OUTPUT inserted.body, inserted.id, inserted.num_chatboxes " +

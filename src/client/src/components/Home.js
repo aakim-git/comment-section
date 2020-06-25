@@ -1,4 +1,4 @@
-﻿ import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import $ from "jquery";
 
 class Home extends Component {
@@ -7,7 +7,7 @@ class Home extends Component {
         this.state = {
             discussion_settings: {
                 "is_discussion": true,
-                "two_sided": false, 
+                "two_sided": false,
                 "login_required": false
             }
         };
@@ -22,17 +22,15 @@ class Home extends Component {
 
 
     CreateNewPrompt() {
-        var num_chatboxes = (this.state.discussion_settings["is_discussion"]) ? 1 : 2;
-        var newPrompt =
-        {
-            body: this.PromptTextField.current.value,
-            num_chatboxes: num_chatboxes
-        }
-
+        let num_chatboxes = (this.state.discussion_settings["is_discussion"]) ? 1 : 2;
         $.ajax({
             type: "POST",
             url: "./prompt/create",
-            data: newPrompt,
+            data: JSON.stringify({
+                "id": -1,
+                "body": this.PromptTextField.current.value,
+                "num_chatboxes": num_chatboxes
+            }),
             contentType: "application/json",
             success:
                 (newPrompt) => {

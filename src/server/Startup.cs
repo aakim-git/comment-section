@@ -21,9 +21,7 @@ namespace CommentSection
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllersWithViews();
-            services.AddSignalR();
+            services.AddSignalR().AddAzureSignalR(_config.GetValue<string>("ConnectionStrings:SignalR"));
             services.AddMvc(option => option.EnableEndpointRouting = false);
             services.AddSingleton(_config);
             services.AddSpaStaticFiles(configuration =>
@@ -53,9 +51,6 @@ namespace CommentSection
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ChatHub>("/Hubs/chatHub");
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
             });
             app.UseMvc();
 

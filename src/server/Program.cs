@@ -20,9 +20,9 @@ namespace CommentSection
 
         public static IHostBuilder CreateHostBuilder(string[] args) {
             var config = new ConfigurationBuilder()
+                .AddJsonFile("src/server/Properties/appsettings.json")
+                .AddJsonFile("src/server/Properties/launchSettings.json")
                 .AddEnvironmentVariables()
-                .AddJsonFile("Properties/appsettings.json")
-                .AddJsonFile("Properties/launchSettings.json")
                 .Build();
 
             return Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(

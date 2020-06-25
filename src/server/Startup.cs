@@ -1,20 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using CommentSection.Hubs;
-using System.Data.SqlClient;
-using System.IO;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.Extensions.Options;
-using CommentSection.src.server;
+using Microsoft.Extensions.Configuration;
+using CommentSection.Hubs;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace CommentSection
 {
@@ -30,48 +21,52 @@ namespace CommentSection
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddControllersWithViews();
             services.AddSignalR();
             services.AddMvc(option => option.EnableEndpointRouting = false);
-            services.AddSingleton<IConfiguration>(_config);
-            services.AddSpaStaticFiles(Configuration =>
+            services.AddSingleton(_config);
+            services.AddSpaStaticFiles(configuration =>
             {
-                Configuration.RootPath = "../src/client/comment-section-client";
+                configuration.RootPath = "src/client/build";
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            applicationLifetime.ApplicationStopping.Register(OnShutdown);
-
-            if (env.IsDevelopment()) {
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
             }
-
-            else {
+            else
+            {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts(); // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSpaStaticFiles();
             app.UseRouting();
-            app.UseAuthorization(); 
-            app.UseEndpoints(endpoints => {
-                endpoints.MapHub<ChatHub>("/Hubs/chatHub"); 
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/Hubs/chatHub");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
             app.UseMvc();
-            
+
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = Path.Join(env.ContentRootPath, "/src/client/comment-section-client");
-                spa.UseReactDevelopmentServer(npmScript: "start");
-            }); 
-        }
-
-        private void OnShutdown()
-        {
-            // Cleanup
+                spa.Options.SourcePath = "src/client";
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
         }
     }
 }

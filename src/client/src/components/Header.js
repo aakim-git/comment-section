@@ -1,6 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import '../style/Header.css';
+
 class Header extends Component {
     render() {
         return (
@@ -11,6 +13,7 @@ class Header extends Component {
                 </div>
 
                 <h1> chatbox </h1>
+                <p> Create an instant, sharable discussion space </p>
 
             </div> 
         );

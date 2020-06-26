@@ -1,0 +1,25 @@
+﻿#main-header {
+    color: white;
+    text-align: center;
+    font-family: Calibri, sans-serif;
+}
+
+#main-header h1 {
+    margin-top: 6vh;
+    margin-bottom: 0;
+    font-size: 60px;
+}
+
+#main-header p {
+    margin-top: 0;
+    font-size: 25px;
+}
+
+#main-navbar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#main-navbar > * {
+    color: white;
+}

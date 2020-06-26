@@ -3,9 +3,9 @@ import Home from './Home.js';
 import Chat from './Chat.js';
 import Header from './Header.js';
 import CommentSection from './CommentSection';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
 import '../style/App.css';
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
 function App() {
     return (

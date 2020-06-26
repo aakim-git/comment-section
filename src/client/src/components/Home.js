@@ -1,6 +1,8 @@
 ﻿import React, { Component } from 'react';
 import $ from "jquery";
 
+import '../style/Home.css';
+
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -69,20 +71,22 @@ class Home extends Component {
 
     render() {
         return (
-            <div className="container">
-                <textarea placeholder="Type a discussion prompt here..." ref={this.PromptTextField} />
-                <button type="button" value="Create New Prompt" onClick={(e) => { this.CreateNewPrompt(); e.preventDefault(); }}>
-                    Create
-                </button>
-                <br />
-
-                <input type="radio" name="discussion-settings" value="discussion" onClick={this.UpdateSettings_IsDiscussion} defaultChecked ></input>
-                <label> Discussion? </label> <br />
-                <input type="radio" name="discussion-settings" value="two-sided" onClick={this.UpdateSettings_IsTwoSided} ></input>
-                <label> Two-Sided Debate? </label> <br />
-                <input type="radio" name="other-settings" value="login-required" onClick={this.UpdateSettings_LoginRequired} ></input>
-                <label> Login Required? </label> <br />
-
+            <div id="Home" className="container">
+                <textarea rows="1" placeholder="Enter a discussion prompt here..." ref={this.PromptTextField} />
+                <div id="Prompt-Buttons">
+                    <div id="Settings-Buttons">
+                        <input type="radio" name="discussion-settings" value="discussion" onClick={this.UpdateSettings_IsDiscussion} defaultChecked ></input>
+                        <label> Discussion? </label> <br />
+                        <input type="radio" name="discussion-settings" value="two-sided" onClick={this.UpdateSettings_IsTwoSided} ></input>
+                        <label> Two-Sided Debate? </label> <br />
+                        <input type="radio" name="other-settings" value="login-required" onClick={this.UpdateSettings_LoginRequired} ></input>
+                        <label> Login Required? </label> <br />
+                    </div>
+                    
+                    <button type="button" value="Create New Prompt" onClick={(e) => { this.CreateNewPrompt(); e.preventDefault(); }}>
+                        Create
+                    </button>
+                </div>
             </div>
         );
     }

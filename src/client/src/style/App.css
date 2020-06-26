@@ -1,15 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
 html {
     height: 100%;
     overflow: hidden;
 }
 
 body {
-    background: #491E1E;
+    background: #323232;
+    z-index: 1;
     color: white;
-    height: 98%;
-    border: 7px solid white;
+    height: 100%;
+    border-left: 15px solid white;
+    border-right: 15px solid white;
 }
-
 
 
 a {

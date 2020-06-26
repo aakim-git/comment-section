@@ -1,2 +1,29 @@
-﻿body {
+﻿#CommentSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#CommentSection > p {
+    background: #DBFF00;
+    color: black;
+    font-size: 25px;
+    padding: 7px 12px;
+    width: 80%;
+}
+
+#CommentSection #Chatboxes {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    justify-content: center;
+}
+
+#CommentSection #Chatboxes > .chatbox {
+    flex-basis: 40%;
+}
+
+#CommentSection .spacer {
+    flex-basis: 5%;
 }

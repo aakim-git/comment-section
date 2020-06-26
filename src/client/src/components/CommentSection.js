@@ -56,15 +56,18 @@ class CommentSection extends Component {
 
     render() {
         let Chatboxes = [];
-        for (var i = 1; i <= this.state.num_chatboxes; i++) {
-            Chatboxes.push( <Chat id={this.state.prompt_id + "/" + i} /> );
+        Chatboxes.push(<Chat id={this.state.prompt_id + "/" + 1} key={1} />);
+        if (this.state.num_chatboxes > 1) {
+            Chatboxes.push(<div className="spacer"></div>);
+            Chatboxes.push(<Chat id={this.state.prompt_id + "/" + 2} key={2} />);
         }
 
         return (
-            <div>
-                <h1> {this.state.prompt_id} </h1>
-                <h1> {this.state.prompt} </h1>
-                <div>{Chatboxes}</div>
+            <div id="CommentSection">
+                <p> <b>Topic:</b> {this.state.prompt} </p>
+                <div id="Chatboxes">
+                    {Chatboxes}
+                </div>
 
             </div>
         );

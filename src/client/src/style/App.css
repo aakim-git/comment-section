@@ -2,7 +2,6 @@
 
 html {
     height: 100%;
-    overflow: hidden;
 }
 
 body {
@@ -43,4 +42,13 @@ textarea {
     resize: none;
     border: none;
     outline: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+ul {
+    list-style-type: none;
+
 }

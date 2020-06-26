@@ -1,0 +1,18 @@
+﻿.chatbox {
+    background: grey;
+    border: 2px solid black;
+}
+
+.Comment-Body {
+    font-size: 15px;
+}
+
+.Comment-Info {
+    font-size: 10px;
+    margin: 0;
+}
+
+.chatbox button {
+    margin-right: 10px;
+    color: blue;
+}

@@ -2,6 +2,8 @@
 import * as signalR from '@aspnet/signalr';
 import $ from "jquery";
 
+import '../style/Chat.css';
+
 class Chat extends Component {
     constructor(props) {
         super(props);
@@ -143,9 +145,8 @@ class Chat extends Component {
         return (
             <ul>
                 <div>
-                    <li> {cmt.body} </li>
-                    <li> {cmt.author} </li>
-                    <li> {cmt.date} </li>
+                    <li className="Comment-Body"> {cmt.body} </li>
+                    <p className="Comment-Info"> {cmt.date} by {cmt.author} </p>
                     <button onClick={
                         (e) => {
                             this.SetReplyTo(cmt.id);
@@ -196,7 +197,6 @@ class Chat extends Component {
         return (
             <div className="chatbox">
                 <div className="container">
-                    <div className="row">&nbsp;</div>
                     <div className="row">
                         <div className="col-2">User</div>
                         <div className="col-4">
@@ -205,13 +205,11 @@ class Chat extends Component {
                     </div>
 
                     <div className="row">
-                        <div className="col-2">Comments</div>
+                        <div className="col-2">Comment</div>
                         <div className="col-4">
                             <input type="text" id="commentInput" onChange={this.handleCommentChange} />
                         </div>
                     </div>
-
-                    <div className="row">&nbsp;</div>
 
                     <div className="row">
                         <div className="col-6">
@@ -228,12 +226,6 @@ class Chat extends Component {
                             id="messaging_to_display">
                                 {this.state.replying_to ? 'Replying to ' + this.state.comment_ref_table[this.state.replying_to].author + '\'s comment:' : null}
                         </div>
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="col-12">
-                        <hr />
                     </div>
                 </div>
 

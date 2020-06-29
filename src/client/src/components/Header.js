@@ -13,13 +13,13 @@ class Header extends Component {
                     <img src={logo} alt="" />
                     <div>
                         <Link to={'/'}> Register </Link>
-                        <Link to={'/'}> Sign In </Link>
+                        <Link to={'/'}> Login </Link>
                         <Link to={'/'} id="create-link"> Create a discussion </Link>
                     </div>
                 </div>
 
                 <h1> chatbox<span id="title-dot">.</span> </h1>
-                <p> <i>Create an instant, sharable discussion space</i> </p>
+                <p> <i>Create instant, sharable discussion spaces</i> </p>
 
             </div> 
         );

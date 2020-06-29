@@ -72,7 +72,7 @@ class Home extends Component {
     render() {
         return (
             <div id="Home" className="container">
-                <textarea rows="1" placeholder="Enter a discussion prompt here" ref={this.PromptTextField} />
+                <textarea rows="1" placeholder="Enter your discussion prompt here" ref={this.PromptTextField} />
                 <div id="Prompt-Buttons">
                     <div id="Settings-Buttons">
                         <input type="radio" name="discussion-settings" value="discussion" onClick={this.UpdateSettings_IsDiscussion} defaultChecked ></input>

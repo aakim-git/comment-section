@@ -1,16 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400&display=swap');
+@font-face {
+    font-family: Chantilly-Serial;
+    src: url('../assets/chantilly-serial-bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: Apercu-Light;
+    src: url('../assets/Apercu Light.otf') format('truetype');
+}
+
+@font-face {
+    font-family: Apercu-Regular;
+    src: url('../assets/Apercu Regular.otf') format('truetype');
+}
+
 
 html {
     height: 100%;
 }
 
 body {
-    background: #323232;
+    background: #171c28;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 1;
     color: white;
     height: 100%;
-    border-left: 15px solid white;
-    border-right: 15px solid white;
 }
 
 

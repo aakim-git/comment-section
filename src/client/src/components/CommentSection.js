@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import Chat from './Chat.js';
 import $ from "jquery";
+import Header from "./Header_Other.js"
 
 import '../style/CommentSection.css';
 
@@ -63,12 +64,14 @@ class CommentSection extends Component {
         }
 
         return (
-            <div id="CommentSection">
-                <p> <b>Topic:</b> {this.state.prompt} </p>
-                <div id="Chatboxes">
-                    {Chatboxes}
+            <div>
+                <Header />
+                <div id="CommentSection">
+                    <p> <b>Topic:</b> {this.state.prompt} </p>
+                    <div id="Chatboxes">
+                        {Chatboxes}
+                    </div>
                 </div>
-
             </div>
         );
     }

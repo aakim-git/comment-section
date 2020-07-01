@@ -1,0 +1,45 @@
+﻿#main-header-other {
+    color: white;
+}
+
+#main-navbar-other {
+    display: flex;
+    justify-content: space-between;
+}
+
+#main-navbar-other #create-link {
+    color: #FF5E5E;
+}
+
+#main-navbar-other a {
+    color: white;
+    font-size: 17px;
+    margin: 20px 20px 0 0;
+    float: right;
+    font-family: 'Apercu-Light', sans-serif;
+}
+
+#title-other {
+    display: flex;
+}
+
+#title-other > * {
+    margin: 20px 0 0 20px;
+}
+
+#title-other #title-dot {
+    color: #943131;
+    font-size: 30px;
+}
+
+#title-other #logo {
+    font-size: 25px;
+    line-height: 10px;
+    color: #FF5E5E;
+}
+
+#title-other #logo-desc {
+    font-size: 13px;
+    line-height: 20px;
+    font-family: 'Apercu-Light', sans-serif;
+}

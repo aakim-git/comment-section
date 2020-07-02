@@ -13,7 +13,7 @@ class Chat extends Component {
             comments_list: [],
             comment_ref_table: {},
             hubConnection: null,
-            id: this.props.id,
+            id: this.props.location,
             replying_to: 0
         };
 
@@ -78,12 +78,13 @@ class Chat extends Component {
 
     InitializeComments() {
         //  Retrieve first level of comments from database 
-        var id = this.props.id.split("/");   // id comes in the form: [prompt_id]/[chatbox_num]
+        var id = this.props.location.split("/");   // id comes in the form: [prompt_id]/[chatbox_num]
         $.ajax({
             type: "GET",
             url: "./comment/GetChildren/-1/" + id[0] + "/" + id[1],
             success:
                 (data) => {
+                    console.log(data);
                     for (var i = 0; i < data.length; i++) {
                         let newComment = new CommentNode(data[i]);
                         this.setState(previousState => ({
@@ -143,43 +144,39 @@ class Chat extends Component {
 
     RenderComments(cmt) {
         return (
-            <ul>
-                <div>
-                    <li className="Comment-Body"> {cmt.body} </li>
-                    <p className="Comment-Info"> {cmt.date} by {cmt.author} </p>
+            <ul class="comment">
+                <li className="Comment-Body"> {cmt.body} </li>
+                <p className="Comment-Info"> {cmt.author} on {cmt.date} </p>
+                <button onClick={
+                    (e) => {
+                        this.SetReplyTo(cmt.id);
+                        e.preventDefault();
+                    }}
+                > Reply </button>
+
+                { // if comment has replies, display a 'See Replies' button
+                    cmt.has_replies > 0 &&
                     <button onClick={
                         (e) => {
-                            this.SetReplyTo(cmt.id);
+                            this.GetChildrenComments(cmt.id);
+                            // this.disappear();
                             e.preventDefault();
                         }}
-                    > Reply </button>
+                    > See Replies </button>
+                }
 
-                    { // if comment has replies, display a 'See Replies' button
-                        cmt.has_replies > 0 &&
-                        <button onClick={
-                            (e) => {
-                                this.GetChildrenComments(cmt.id);
-                                // this.disappear();
-                                e.preventDefault();
-                            }}
-                        > See Replies </button>
-                    }
+                {
+                    cmt.replies &&
+                    cmt.replies.length > 0 &&
+                    cmt.replies.map((comment) => {
+                        return (
+                            <div key={comment.id}>
+                                {this.RenderComments(comment)}
+                            </div>
+                        )
+                    })
+                }
 
-                    <div>
-                        {
-                            cmt.replies &&
-                            cmt.replies.length > 0 &&
-                            cmt.replies.map((comment) => {
-                                return (
-                                    <div key={comment.id}>
-                                        {this.RenderComments(comment)}
-                                    </div>
-                                )
-                            })
-
-                        }
-                    </div>
-                </div>
             </ul>
         );
     }
@@ -195,24 +192,19 @@ class Chat extends Component {
         );
              
         return (
-            <div className="chatbox">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-2">User</div>
-                        <div className="col-4">
-                            <input type="text" id="userInput" onChange={this.handleUsernameChange} />
-                        </div>
-                    </div>
+            <div id={this.props.id} className="chatbox">
+                <div id="commentsList">
+                    {CommentsList}
+                </div>
 
-                    <div className="row">
-                        <div className="col-2">Comment</div>
-                        <div className="col-4">
-                            <input type="text" id="commentInput" onChange={this.handleCommentChange} />
+                <div id="comment-field">
+                    <div id="commentInputs">
+                        <div>
+                            <input type="text" id="userInput" placeholder="User" onChange={this.handleUsernameChange} />
+                            <input type="text" id="commentInput" placeholder="Comment" onChange={this.handleCommentChange} />
                         </div>
-                    </div>
 
-                    <div className="row">
-                        <div className="col-6">
+                        <div id="send-button-div">
                             <input
                                 type="button"
                                 id="sendButton"
@@ -221,24 +213,11 @@ class Chat extends Component {
                                 onClick={(e) => { this.SendComment(); e.preventDefault(); }}
                             />
                         </div>
-                        <div
-                            onClick={(e) => { this.SetReplyTo(0); e.preventDefault(); }}
-                            id="messaging_to_display">
-                                {this.state.replying_to ? 'Replying to ' + this.state.comment_ref_table[this.state.replying_to].author + '\'s comment:' : null}
-                        </div>
+                    </div>
+                    <div onClick={(e) => { this.SetReplyTo(0); e.preventDefault(); }} id="messaging_to_display">
+                        {this.state.replying_to ? 'Replying to ' + this.state.comment_ref_table[this.state.replying_to].author + '\'s comment:' : null}
                     </div>
                 </div>
-
-                <div className="row">
-                    <div className="col-6">
-                        <ul id="commentsList">
-                            <div>
-                                {CommentsList}
-                            </div>
-                        </ul>
-                    </div>
-                </div>
-
             </div>
         );
     }

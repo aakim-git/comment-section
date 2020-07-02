@@ -1,6 +1,5 @@
 ﻿.chatbox {
-    background: grey;
-    border: 2px solid black;
+    background: #E2E2E2;
 }
 
 .Comment-Body {
@@ -12,7 +11,69 @@
     margin: 0;
 }
 
-.chatbox button {
+.chatbox {
+    height: 90vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    align-content: space-between;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#single-chatbox {
+    flex-basis: 100%;
+}
+
+#double-chatbox-1 {
+    flex-basis: 40%;
+}
+
+#double-chatbox-2 {
+    flex-basis: 40%;
+}
+
+#commentsList {
+    padding-top: 20px;
+    flex-basis: 90%;
+}
+
+#commentsList > div > .comment {
+    background: white;
+}
+
+.comment {
+    background: #EFEFEF;
+    padding-top: 20px;
+    padding-bottom: 5px;
+    color: black;
+    border: 0.1px solid #BCBCBC;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: "Apercu-Light", sans-serif;
+}
+
+.comment > button {
     margin-right: 10px;
     color: blue;
+    font-size: 10px;
+    padding-bottom: 15px;
+}
+
+#comment-field {
+    flex-basis: 90%;
+    background: #CCCCCC;
+    padding: 10px 10px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 15px;
+}
+
+#commentInputs {
+    display: flex;
+    justify-content: space-between;
+}
+
+#commentInputs > #send-button-div {
+    border-left: 3px solid gray;
+    padding-left: 10px;
 }

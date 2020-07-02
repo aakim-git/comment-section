@@ -3,14 +3,21 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    padding-top: 15vh;
+    padding-bottom: 7vh;
 }
 
 #CommentSection > p {
-    background: #DBFF00;
+    background: #FFE600;
     color: black;
-    font-size: 25px;
-    padding: 7px 12px;
-    width: 80%;
+    font-size: 20px;
+    padding: 6px 45px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'Margarine', cursive;
+    margin: 0;
+    z-index: 1;
 }
 
 #CommentSection #Chatboxes {
@@ -18,12 +25,6 @@
     flex-wrap: wrap;
     flex-basis: 100%;
     justify-content: center;
-}
-
-#CommentSection #Chatboxes > .chatbox {
-    flex-basis: 40%;
-}
-
-#CommentSection .spacer {
-    flex-basis: 5%;
+    background: #E2E2E2;
+    margin-top: -17px;
 }

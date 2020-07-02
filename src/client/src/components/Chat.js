@@ -24,6 +24,7 @@ class Chat extends Component {
         this.SendComment = this.SendComment.bind(this);
         this.SetReplyTo = this.SetReplyTo.bind(this);
         this.GetChildrenComments = this.GetChildrenComments.bind(this);
+        this.HideChildrenComments = this.HideChildrenComments.bind(this);
         this.RenderComments = this.RenderComments.bind(this);
         this.SendButton = React.createRef();
 
@@ -116,6 +117,7 @@ class Chat extends Component {
                             let newComment = new CommentNode(data[i]);
                             let updated_comment_ref_table = this.state.comment_ref_table;
                             updated_comment_ref_table[of].replies.push(newComment);
+                            updated_comment_ref_table[of].replies_shown = true;
                             updated_comment_ref_table[newComment.id] = newComment;
                             this.setState({ comment_ref_table: updated_comment_ref_table }); 
                         }
@@ -127,7 +129,15 @@ class Chat extends Component {
                     }
             });
         }
-        
+    }
+
+    HideChildrenComments(of) {
+        if (this.state.comment_ref_table[of].has_replies) {
+            let updated_ref_table = this.state.comment_ref_table;
+            updated_ref_table[of].replies = [];
+            updated_ref_table[of].replies_shown = false;
+            this.setState({ comment_ref_table: updated_ref_table });
+        }
     }
 
     handleUsernameChange(e) { this.setState({ username: e.target.value }); }
@@ -143,6 +153,28 @@ class Chat extends Component {
     }
 
     RenderComments(cmt) {
+        let ShowOrHideRepliesButton;
+        if (cmt.has_replies > 0) {
+            if (cmt.replies_shown) {
+                ShowOrHideRepliesButton =
+                    <button onClick= {
+                        (e) => {
+                            this.HideChildrenComments(cmt.id);
+                            e.preventDefault();
+                        }}
+                    > Hide Replies </button>
+            }
+            else {
+                ShowOrHideRepliesButton =
+                    <button onClick= {
+                        (e) => {
+                            this.GetChildrenComments(cmt.id);
+                            e.preventDefault();
+                        }}
+                    > See Replies </button>
+            }
+        }
+
         return (
             <ul class="comment">
                 <li className="Comment-Body"> {cmt.body} </li>
@@ -154,16 +186,7 @@ class Chat extends Component {
                     }}
                 > Reply </button>
 
-                { // if comment has replies, display a 'See Replies' button
-                    cmt.has_replies > 0 &&
-                    <button onClick={
-                        (e) => {
-                            this.GetChildrenComments(cmt.id);
-                            // this.disappear();
-                            e.preventDefault();
-                        }}
-                    > See Replies </button>
-                }
+                {ShowOrHideRepliesButton}
 
                 {
                     cmt.replies &&
@@ -232,6 +255,7 @@ class CommentNode {
             this.rank = null;
             this.author = null;
             this.has_replies = null;
+            this.replies_shown = false;
             this.replies = [];
         }
 
@@ -242,6 +266,7 @@ class CommentNode {
             this.rank = Comment.rank;
             this.author = Comment.author;
             this.has_replies = Comment.num_replies;
+            this.replies_shown = false;
             this.replies = [];
         }
     }

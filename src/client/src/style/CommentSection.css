@@ -3,19 +3,19 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    height: 85%;
 }
 
 #CommentSection > p {
     background: #FDEF71;
     color: #464D00;
-    font-size: 20px;
+    font-size: 25px;
     border-left: 3px double white;
     border-right: 3px double white;
     padding: 2px 45px;
     text-align: center;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-    font-family: 'Caveat', cursive;
-    font-weight: 500;
-    margin: 0;
+    font-family: 'Apercu-Regular';
+    margin: 3vh 0 0 0;
     z-index: 1;
 }

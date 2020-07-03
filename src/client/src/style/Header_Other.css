@@ -11,7 +11,7 @@
     color: #FF5E5E;
 }
 
-#main-navbar-other a {
+#main-navbar-links >  a {
     color: white;
     font-size: 17px;
     margin: 20px 20px 0 0;
@@ -21,10 +21,12 @@
 
 #title-other {
     display: flex;
+    float: left;
 }
 
 #title-other > * {
-    margin: 20px 0 0 20px;
+    margin-left: 20px;
+    padding-top: 7px;
 }
 
 #title-other #title-dot {
@@ -34,7 +36,7 @@
 
 #title-other #logo {
     font-size: 25px;
-    line-height: 10px;
+    line-height: 0px;
     color: #FF5E5E;
 }
 

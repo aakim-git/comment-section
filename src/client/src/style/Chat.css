@@ -27,8 +27,6 @@
     height: 100%;
     justify-content: center;
     margin-top: -17px;
-    border-left: 15px solid black;
-    border-right: 15px solid black;
     background-image: url(../assets/background2.png);
 }
 

@@ -9,11 +9,11 @@ class Header extends Component {
             <div id="main-header-other">
                 <div id="main-navbar-other">
                     <div id="title-other">
-                        <h1 id="logo"> chatbox<span id="title-dot">.</span> </h1>
+                        <Link to={'/'}> <h1 id="logo"> chatbox<span id="title-dot">.</span> </h1> </Link>
                         <p id="logo-desc"> Create instant, sharable discussion spaces </p>
                     </div>
 
-                    <div>
+                    <div id="main-navbar-links">
                         <Link to={'/'}> Register </Link>
                         <Link to={'/'}> Login </Link>
                         <Link to={'/'} id="create-link"> Create a discussion </Link>

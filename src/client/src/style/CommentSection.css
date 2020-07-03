@@ -9,8 +9,8 @@
     background: #FDEF71;
     color: #464D00;
     font-size: 20px;
-    border-left: 3px dashed white;
-    border-right: 3px dashed white;
+    border-left: 3px double white;
+    border-right: 3px double white;
     padding: 2px 45px;
     text-align: center;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);

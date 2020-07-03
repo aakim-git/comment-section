@@ -223,17 +223,19 @@ class Chat extends Component {
                 </div>
 
                 <div id="comment-field">
+                    <div onClick={(e) => { this.SetReplyTo(0); e.preventDefault(); }} id="messaging_to_display">
+                        { this.state.replying_to > 0 &&
+                            <p> &#8620; Replying to {this.state.comment_ref_table[this.state.replying_to].author}'s comment </p>
+                        }
+                    </div>
+
                     <div id="commentInputs">
                         <input type="text" id="commentInput" placeholder="Comment" onChange={this.handleCommentChange} />
-
                         <div id="send-button-div">
                             <button id="sendButton" ref={this.SendButton} onClick={(e) => { this.SendComment(); e.preventDefault(); }}>
                                 <img src={Bubble} alt=""></img>
                             </button> 
                         </div>
-                    </div>
-                    <div onClick={(e) => { this.SetReplyTo(0); e.preventDefault(); }} id="messaging_to_display">
-                        {this.state.replying_to ? 'Replying to ' + this.state.comment_ref_table[this.state.replying_to].author + '\'s comment:' : null}
                     </div>
                 </div>
             </div>

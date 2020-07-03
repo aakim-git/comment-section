@@ -3,28 +3,19 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    padding-top: 15vh;
-    padding-bottom: 7vh;
 }
 
 #CommentSection > p {
-    background: #FFE600;
-    color: black;
+    background: #FDEF71;
+    color: #464D00;
     font-size: 20px;
-    padding: 6px 45px;
+    border-left: 3px dashed white;
+    border-right: 3px dashed white;
+    padding: 2px 45px;
     text-align: center;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    font-family: 'Margarine', cursive;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'Caveat', cursive;
+    font-weight: 500;
     margin: 0;
     z-index: 1;
-}
-
-#CommentSection #Chatboxes {
-    display: flex;
-    flex-wrap: wrap;
-    flex-basis: 100%;
-    justify-content: center;
-    background: #E2E2E2;
-    margin-top: -17px;
 }

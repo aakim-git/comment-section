@@ -70,7 +70,7 @@ class CommentSection extends Component {
             <div>
                 <Header />
                 <div id="CommentSection">
-                    <p> <b>TOPIC:</b> {this.state.prompt} </p>
+                    <p> {this.state.prompt} </p>
                     <div id="Chatboxes">
                         {Chatboxes}
                     </div>

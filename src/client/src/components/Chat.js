@@ -3,6 +3,7 @@ import * as signalR from '@aspnet/signalr';
 import $ from "jquery";
 
 import '../style/Chat.css';
+import Bubble from '../assets/bubble.png';
 
 class Chat extends Component {
     constructor(props) {
@@ -216,25 +217,19 @@ class Chat extends Component {
              
         return (
             <div id={this.props.id} className="chatbox">
+                <span></span>
                 <div id="commentsList">
                     {CommentsList}
                 </div>
 
                 <div id="comment-field">
                     <div id="commentInputs">
-                        <div>
-                            <input type="text" id="userInput" placeholder="User" onChange={this.handleUsernameChange} />
-                            <input type="text" id="commentInput" placeholder="Comment" onChange={this.handleCommentChange} />
-                        </div>
+                        <input type="text" id="commentInput" placeholder="Comment" onChange={this.handleCommentChange} />
 
                         <div id="send-button-div">
-                            <input
-                                type="button"
-                                id="sendButton"
-                                value="Send Comment"
-                                ref={this.SendButton}
-                                onClick={(e) => { this.SendComment(); e.preventDefault(); }}
-                            />
+                            <button id="sendButton" ref={this.SendButton} onClick={(e) => { this.SendComment(); e.preventDefault(); }}>
+                                <img src={Bubble} alt=""></img>
+                            </button> 
                         </div>
                     </div>
                     <div onClick={(e) => { this.SetReplyTo(0); e.preventDefault(); }} id="messaging_to_display">

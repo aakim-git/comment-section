@@ -27,7 +27,9 @@ class Chat extends Component {
         this.GetChildrenComments = this.GetChildrenComments.bind(this);
         this.HideChildrenComments = this.HideChildrenComments.bind(this);
         this.RenderComments = this.RenderComments.bind(this);
+
         this.SendButton = React.createRef();
+        this.SendCommentTextArea = React.createRef();
 
     }
 
@@ -177,7 +179,7 @@ class Chat extends Component {
         }
 
         return (
-            <ul class="comment">
+            <ul className="comment">
                 <li className="Comment-Body"> {cmt.body} </li>
                 <p className="Comment-Info"> {cmt.author} on {cmt.date} </p>
                 <button onClick={
@@ -223,14 +225,24 @@ class Chat extends Component {
                 </div>
 
                 <div id="comment-field">
-                    <div onClick={(e) => { this.SetReplyTo(0); e.preventDefault(); }} id="messaging_to_display">
+                    <div id="messaging_to_display" onClick={(e) => { this.SetReplyTo(0); e.preventDefault(); }}>
                         { this.state.replying_to > 0 &&
                             <p> &#8620; Replying to {this.state.comment_ref_table[this.state.replying_to].author}'s comment </p>
                         }
                     </div>
 
                     <div id="commentInputs">
-                        <input type="text" id="commentInput" placeholder="Comment" onChange={this.handleCommentChange} />
+                        <input
+                            type="text" id="commentInput" placeholder="Comment"
+                            ref={this.SendCommentTextArea}
+                            onChange={this.handleCommentChange}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                    this.SendComment();
+                                    this.SendCommentTextArea.current.value = "";
+                                }
+                            }}
+                        />
                         <div id="send-button-div">
                             <button id="sendButton" ref={this.SendButton} onClick={(e) => { this.SendComment(); e.preventDefault(); }}>
                                 <img src={Bubble} alt=""></img>

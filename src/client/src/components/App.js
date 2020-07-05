@@ -1,6 +1,6 @@
 import React from 'react';
 import Home from './Home.js';
-import Chat from './Chat.js';
+import PageNotFound from './PageNotFound.js';
 import CommentSection from './CommentSection';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
@@ -11,8 +11,8 @@ function App() {
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={Home} />
-                <Route path="/chat" component={Chat} />
-                <Route path="/(\d+)/" component={CommentSection} / >
+                <Route path="/(\d+)" component={CommentSection} />
+                <Route path="*" component={PageNotFound} />
             </Switch>
         </BrowserRouter>
     );

@@ -1,0 +1,19 @@
+﻿#InvalidPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#InvalidPage h1 {
+    font-family: 'Chantilly-Serial', sans-serif;
+    color: white;
+    font-size: 80px;
+    margin-bottom: 0;
+}
+
+#InvalidPage p {
+    font-family: 'Apercu-Light', sans-serif;
+    font-size: 30px;
+    color: #FF5E5E;
+}

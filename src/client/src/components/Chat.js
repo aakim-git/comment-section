@@ -211,11 +211,18 @@ class Chat extends Component {
     
 
     render() {
-        let CommentsList = this.state.comments_list.map((comment) =>
-            <div key={comment.id}>
-                { this.RenderComments(comment) }
-            </div>
-        );
+        let CommentsList;
+        if (this.state.comments_list.length === 0) {
+            CommentsList = <div id="EmptyChatboxText"> Share the link or comment to start the discussion! </div>
+        }
+        else {
+            CommentsList = this.state.comments_list.map((comment) =>
+                <div key={comment.id}>
+                    {this.RenderComments(comment)}
+                </div>
+            );
+        }
+            
              
         return (
             <div id={this.props.id} className="chatbox">

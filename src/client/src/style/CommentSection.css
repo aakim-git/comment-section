@@ -4,10 +4,7 @@
     align-items: center;
     flex-wrap: wrap;
     height: 85%;
-    background-image: url(../assets/background2.png);
-    padding-top: 5px;
-    border-left: 15px solid black;
-    border-right: 15px solid black;
+    margin-top: -10px;
 }
 
 #CommentSection > p {
@@ -19,7 +16,7 @@
     padding: 2px 45px;
     text-align: center;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-    font-family: 'Apercu-Regular';
+    font-family: 'Caveat';
     margin: 0;
     z-index: 1;
 }

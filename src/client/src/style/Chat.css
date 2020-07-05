@@ -15,9 +15,10 @@
 .chatbox {
     display: flex;
     align-content: space-between;
-    background-color: rgba(255, 255, 255, 0.75);
+    background: #f6f6f6;
     flex-wrap: wrap;
     justify-content: center;
+    height: 100%;
 }
 
 #Chatboxes {
@@ -28,6 +29,8 @@
     justify-content: center;
     margin-top: -17px;
     background-image: url(../assets/background2.png);
+    border-left: 15px solid black;
+    border-right: 15px solid black;
 }
 
 #single-chatbox {
@@ -196,4 +199,13 @@
     position: absolute;
     top: -30px;
     left: 20px;
+}
+
+#EmptyChatboxText {
+    text-align: center;
+    color: gray;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

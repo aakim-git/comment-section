@@ -150,6 +150,10 @@ class Chat extends Component {
     SetReplyTo(comment_id) { this.setState({ replying_to: comment_id }); }
 
     SendComment() {
+        if (!this.state.comment.trim()) {
+            return;
+        }
+
         this.state.hubConnection.invoke("SendComment", this.state.username, this.state.comment, this.state.id, this.state.replying_to).catch(function (err) {
             return console.error(err.toString());
         });

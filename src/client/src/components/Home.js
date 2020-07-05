@@ -25,6 +25,11 @@ class Home extends Component {
 
 
     CreateNewPrompt() {
+        // if there is no text, don't do anything
+        if (!this.PromptTextField.current.value.trim()) {
+            return;
+        }
+
         let num_chatboxes = (this.state.discussion_settings["is_discussion"]) ? 1 : 2;
         $.ajax({
             type: "POST",
